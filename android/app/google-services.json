@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "916561999067",
+    "firebase_url": "https://gestao-de-quadra-espotiva.firebaseio.com",
+    "project_id": "gestao-de-quadra-espotiva",
+    "storage_bucket": "gestao-de-quadra-espotiva.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916561999067:android:61ecfa678d99f5ee55c8fe",
+        "android_client_info": {
+          "package_name": "com.adminmbgqe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916561999067-pe3ulp0khrmqvno164bsuoh4n8uss60t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9nIFepgqk8QxnCBkB3cOy3abDR62QRgA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916561999067-pe3ulp0khrmqvno164bsuoh4n8uss60t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916561999067:android:2430a4e24616d7b755c8fe",
+        "android_client_info": {
+          "package_name": "com.appmbgqe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916561999067-pe3ulp0khrmqvno164bsuoh4n8uss60t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9nIFepgqk8QxnCBkB3cOy3abDR62QRgA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916561999067-pe3ulp0khrmqvno164bsuoh4n8uss60t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,52 @@
+[
+    {
+        "id": 0,
+        "hour": "10:00",
+        "selected": false
+    },
+    {
+        "id": 1,
+        "hour": "11:00",
+        "selected": false
+    },
+    {
+        "id": 2,
+        "hour": "13:00",
+        "selected": false
+    },
+    {
+        "id": 3,
+        "hour": "14:00",
+        "selected": false
+    },
+    {
+        "id": 4,
+        "hour": "15:00",
+        "selected": false
+    },
+    {
+        "id": 5,
+        "hour": "16:00",
+        "selected": false
+    },
+    {
+        "id": 6,
+        "hour": "17:00",
+        "selected": false
+    },
+    {
+        "id": 7,
+        "hour": "18:00",
+        "selected": false
+    },
+    {
+        "id": 8,
+        "hour": "19:00",
+        "selected": false
+    },
+    {
+        "id": 9,
+        "hour": "20:00",
+        "selected": false
+    }
+]
