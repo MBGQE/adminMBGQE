@@ -61,7 +61,7 @@ export default () => {
             else 
             {
                 userDispatch({
-                    type: 'setId',
+                    type: 'setIdAdm',
                     payload: {
                         idAdm: result,
                     },

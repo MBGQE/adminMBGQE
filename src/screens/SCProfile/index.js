@@ -139,10 +139,10 @@ export default () => {
                 if(upAvatar)
                 {
                     setAlert(true, "Aviso", "Avatar atualizado com sucesso!");
+                    setLoading(false);
                     UserInfoData();
                 }
             }
-            setLoading(false);
         })
         .catch(error => {
             console.log(error);
