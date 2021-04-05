@@ -45,7 +45,7 @@ export default () => {
         if (emailField != '' && passwordField != '') 
         {
             let result = await Api.SignIn(emailField, passwordField);
-            console.log("result: ", result);
+            console.log("idAdm: ", result);
             if (result.code == 'auth/user-not-found') 
             {
                 setAlert(true, 'Erro ao entrar:', 'Usuário não encontrado!')
@@ -63,7 +63,7 @@ export default () => {
                 userDispatch({
                     type: 'setId',
                     payload: {
-                        id: result,
+                        idAdm: result,
                     },
                 });
                 navigation.reset({

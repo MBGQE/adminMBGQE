@@ -14,6 +14,7 @@ import {
 
     EmptyScroller,
     EmptyHeader,
+    EmptyToday,
     EmptyTitle,
 
     ListArea,
@@ -41,7 +42,7 @@ import AlertCustom from '../../components/AlertCustom';
 
 export default () => {
     const { dispatch: userDispatch } = useContext(UserContext);
-    const  {state: user } = useContext(UserContext);
+    const  { state: user } = useContext(UserContext);
 
     const [loading, setLoading] = useState(false);
     const [listAppointments, setListAppointments] = useState([]);
@@ -51,6 +52,8 @@ export default () => {
     const [alertMessage, setAlertMessage] = useState("");
     const [alertVisible, setAlertVisible] = useState(false);
     const [itemCancel, setItemCancel] = useState("");
+
+    const [today, setToday] = useState("");
 
     const setAlert = (visible = false, title = "", message = "", item) => {
         setAlertTitle(title);
@@ -75,6 +78,16 @@ export default () => {
         }
         setIdCourt();
     }, [])
+
+    useEffect(() => {
+        let date = new Date();
+        let Day = date.getDate();
+        let Month = date.getMonth();
+        let Year = date.getFullYear();
+        let month = Month < 10 ? '0' + (Month + 1) : (Month + 1);
+        let day = Day < 10 ? '0' + Day : Day;
+        setToday( `${day}/${month}/${Year}`);
+    }, []);
 
     const getListAppointments = async () => {
         setLoading(true);
@@ -180,6 +193,7 @@ export default () => {
                             }
                         >
                             <EmptyHeader>
+                                <EmptyToday>{today}</EmptyToday>
                                 <EmptyTitle>Não possui nenhum agendamento!</EmptyTitle>
                             </EmptyHeader>
                         </EmptyScroller>

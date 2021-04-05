@@ -61,6 +61,19 @@ export default () => {
         setAlertVisible(visible);
     }
 
+    const fetchCep = async () => {
+        await cep(cepField)
+            .then((result) => {
+                setStateField(result.state)
+                setCityField(result.city)
+                setNeighborhoodField(result.neighborhood)
+                setStreetField(result.street)
+            })
+            .catch(() => {
+                setAlert(true, 'Atenção', 'O CEP informado é inválido!');
+            });
+    }
+
     const handleSignUpClick = async () => {
         if (nameField != '' &&
             phoneField != '' &&
@@ -107,19 +120,6 @@ export default () => {
         {
             setAlert(true, 'Erro:', 'Preencha todos os campos!');
         }
-    }
-
-    const fetchCep = async () => {
-        await cep(cepField)
-            .then((result) => {
-                setStateField(result.state);
-                setCityField(result.city);
-                setNeighborhoodField(result.neighborhood);
-                setStreetField(result.street);
-            })
-            .catch(() => {
-                setAlert(true, 'Erro:', 'O CEP informado é unválido!');
-            });
     }
 
     return (

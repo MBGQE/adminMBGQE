@@ -14,6 +14,7 @@ import {
 
     UserInfoArea,
     AvatarArea,
+    AvatarIcon,
     UserAvatarUpdate,
     UserAvatar,
 
@@ -39,6 +40,8 @@ import SCMenuModal from '../../components/SCMenuModal';
 
 import Api from '../../Api';
 import AlertCustom from '../../components/AlertCustom';
+
+import Colors from '../../assets/Themes/Colors';
 
 export default () => {
     const { state: user } = useContext(UserContext);
@@ -131,8 +134,8 @@ export default () => {
             console.log(path);
             if(path !== "")
             {
-                const result = await Api.uploadImageAdm(user.idAdm, path);
-                const upAvatar = await Api.updateAvatarAdm(user.idAdm, result);
+                const result = await Api.uploadImageCourt(user.idCourt, path);
+                const upAvatar = await Api.updateAvatarCourt(user.idCourt, result);
                 if(upAvatar)
                 {
                     setAlert(true, "Aviso", "Avatar atualizado com sucesso!");
@@ -226,16 +229,14 @@ export default () => {
                     <UserInfoArea>
                         <AvatarArea>
                             <UserAvatarUpdate onPress = { handleUpdateAvatar }>
-                                {
-                                    quadraInfo.avatar != '' ? 
-                                    (
-                                        <UserAvatar source = {{ uri: quadraInfo.avatar }} />
-                                    ) 
-                                    : 
-                                    (
-                                        <AccountIcon width = "150" height = "150" fill = "#FFF" />
-                                    )
-                                }
+                            {
+                                quadraInfo.avatar == '' ?
+                                <AvatarIcon>
+                                    <AccountIcon width = "150" height = "150" fill = { Colors.primary } />
+                                </AvatarIcon>
+                                :
+                                <UserAvatar source = {{ uri: quadraInfo.avatar }} />                        
+                            }
                             </UserAvatarUpdate>
                         </AvatarArea>
 
