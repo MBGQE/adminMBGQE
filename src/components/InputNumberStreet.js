@@ -5,19 +5,19 @@ import Colors from '../assets/Themes/Colors';
 const InputArea = styled.View`
     width: 32%;
     height: 60px;
-    background: #FFF;
+    background-color: #FFF;
     flex-direction: row;
     border-radius: 30px;
     padding-left: 15px;
     align-items: center;
+    margin-bottom: 10px;
 `;
 
 const Input = styled.TextInput`
     flex: 1;
     font-size: 16px;
     color: ${ Colors.primary };
-    margin-left: 10px;
-    fontFamily: monospace;
+    margin-left: 5px;
 `;
 
 const TextRequesited = styled.Text`
@@ -25,30 +25,24 @@ const TextRequesited = styled.Text`
     font-size: 20px;
 `;
 
-export default ({ IconSvg, placeholder, value, onChangeText, requesited }) => {
-
-    return(
+export default ({ placeholder, value, onChangeText, onEndEditing, maxLength, minLength, requesited }) => {
+    return (
         <InputArea>
-            {
-                IconSvg != null 
-                ? 
-                    <IconSvg width = "24" height = "24" fill = { Colors.primary } />
-                    :
-                    null
-            }
-                
             <Input
                 placeholder = { placeholder }
                 placeholderTextColor = { Colors.primary }
                 value = { value }
                 onChangeText = { onChangeText }
-                keyboardType = 'numeric'
+                onEndEditing = { onEndEditing }
+                maxLength = { maxLength }
+                minLength = { minLength }
+                keyboardType = "numeric"
             />
-
             {
-                requesited &&
-                <TextRequesited>{ "*" }</TextRequesited>
+                requesited 
+                && 
+                <TextRequesited>*</TextRequesited>
             }
-        </InputArea>       
+        </InputArea>
     );
 }

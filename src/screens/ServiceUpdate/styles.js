@@ -1,10 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/native';
+
 import Colors from '../../assets/Themes/Colors';
 
 export const Container = styled.SafeAreaView`
     flex: 1;
     background-color: ${ Colors.primary };
+`;
+
+export const LoadingIcon = styled.ActivityIndicator`
+    margin-top: 30px;
+    margin-bottom: 30px
 `;
 
 export const BackButton = styled.TouchableOpacity`

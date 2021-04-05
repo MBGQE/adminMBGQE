@@ -6,11 +6,22 @@ import BackIcon from '../assets/Images/back.svg';
 import InputNumber from './InputNumber';
 
 import Api from '../Api';
-import { Alert } from 'react-native';
 
 import Colors from '../assets/Themes/Colors';
 
+import AlertCustom from '../components/AlertCustom';
+
 export default ({ show, setShow, quadraInfo, service }) => {
+
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const setAlert = (visible = false, title = '', message = '') => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
 
     const [newPriceField, setNewPriceField] = useState('');
 
@@ -22,25 +33,26 @@ export default ({ show, setShow, quadraInfo, service }) => {
         const newPriceNumber = Number(newPriceField);
         const tipo = quadraInfo.servico[service].tipo;
         const preco = quadraInfo.servico[service].preco;
-        if(newPriceNumber > 0)
+
+        if (newPriceNumber > 0) 
         {
             let result = await Api.updatePrice(quadraInfo.idQuadra, tipo, preco, newPriceNumber);
-            if(result)
+            if (result) 
             {
-                Alert.alert(`Serviço ${tipo} R$${preco.toFixed(2)} foi alterado para ${tipo} R$${newPriceNumber.toFixed(2)}.`);
+                setAlert(true,'Aviso:',`Serviço ${tipo} R$${preco.toFixed(2)} foi alterado para ${tipo} R$${newPriceNumber.toFixed(2)}!`);
                 setShow(false);
             }
-        }
-        else
+        } 
+        else 
         {
-            Alert.alert("Preencha o campo corretamente!")
+            setAlert(true, 'Aviso:', 'Prencha o campo corretamente!');
         }
     }
 
     return (
-        <Modal
-            transparent = { true }
-            visible = { show }
+        <Modal 
+            transparent = { true } 
+            visible = { show } 
             animationType = "fade"
         >
             <ModalArea>
@@ -49,25 +61,36 @@ export default ({ show, setShow, quadraInfo, service }) => {
                 </CloseButton>
 
                 {
-                    service != null &&
-                    <InputArea>
-                        <InputNumber
-                            placeholder = "Novo preço"
-                            value = { newPriceField }
-                            onChangeText = { t => setNewPriceField(t) }
-                        />
+                    service != null && 
+                    (
+                        <InputArea>
+                            <InputNumber
+                                placeholder = "Novo preço"
+                                value = { newPriceField }
+                                onChangeText = { (t) => setNewPriceField(t) }
+                            />
 
-                        <CustomButton onPress = { handleNewPriceClick } >
-                            <CustomButtonText>Registrar Novo Preço</CustomButtonText>
-                        </CustomButton>
-                    </InputArea>
+                            <CustomButton onPress = { handleNewPriceClick } >
+                                <CustomButtonText>Registrar Novo Preço</CustomButtonText>
+                            </CustomButton>
+                        </InputArea>
+                    )
                 }
             </ModalArea>
+
+            <AlertCustom
+                showAlert = { alertVisible }
+                setShowAlert = { setAlertVisible } 
+                alertTitle = { alertTitle }
+                alertMessage = { alertMessage }
+                displayNegativeButton = { true }
+                negativeText = { "OK" }
+            />
         </Modal>
     );
 }
 
-const Modal = styled.Modal``;
+const Modal = styled.Modal``
 
 const ModalArea = styled.View`
     flex: 1;

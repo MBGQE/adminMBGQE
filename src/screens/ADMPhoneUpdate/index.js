@@ -1,19 +1,23 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
 import { UserContext } from '../../context/UserContext';
 
+import AlertCustom from '../../components/AlertCustom';
+
 import {
     Container,
     BackButton,
-    UpPhoneHeader, 
+
+    UpPhoneHeader,
     UpPhoneTitle,
 
-    InputArea, 
-    CustomButton, 
-    CustomButtonText
-} from './styles'
+    InputArea,
+
+    CustomButton,
+    CustomButtonText,
+} from './styles';
 
 import BackIcon from '../../assets/Images/back.svg';
 import PhoneIcon from '../../assets/Images/phone.svg';
@@ -21,67 +25,70 @@ import PhoneIcon from '../../assets/Images/phone.svg';
 import InputNumber from '../../components/InputNumber';
 
 import { phoneMask } from '../../Mask';
-import { Alert } from 'react-native';
 import Api from '../../Api';
 
 export default () => {
     const navigation = useNavigation();
-    
+
     const { state: user } = useContext(UserContext);
 
     const [userInfo, setUserInfo] = useState('');
     const [phoneField1, setPhoneField1] = useState('');
     const [phoneField2, setPhoneField2] = useState('');
 
+    const [alertTitle, setAlertTitle] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const setAlert = (visible = false, title = "", message = "") => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
+
     useEffect(() => {
         const UserInfoData = async () => {
             let result = await Api.LoadUserAdmin(user.idAdm);
-            if(result.exists)
+            if (result.exists) 
             {
                 setUserInfo(result.data());
             }
         }
         UserInfoData();
-    }, []);
+    }, [])
 
     const handleBackButtonClick = () => {
         navigation.goBack();
     }
 
     const handlePhoneUpdateClick = async () => {
-        if(phoneField1 != '')
+        if(phoneField1 != '' && phoneField1.length === 14)
         {
             let result = await Api.updatePhoneADM(user.idAdm, phoneField1, phoneField2);
-            
             if(result)
             {
-                Alert.alert("Telefone alterado com sucesso!");
-                navigation.goBack();
+                setAlert(true, "Aviso:", "Telefone alterado com sucesso!");
             }
         }
-        else if(phoneField2 != '')
+        else if(phoneField2 != '' && phoneField2.length === 14)
         {
-            let result = await Api.updatePhoneADM(user.idAdm, userInfo.celular1, phoneField2);
-            
+            let result = await Api.updatePhoneADM(user, userInfo.celular1, phoneField2);
             if(result)
             {
-                Alert.alert("Telefone alterado com sucesso!");
-                navigation.goBack();
+                setAlert(true, "Aviso:", "Telefone alterado com sucesso!");
             }            
         }
-        else if(phoneField1 != '' && phoneField2 != '')
+        else if((phoneField1 != '' && phoneField1.length === 14) && (phoneField2 != '' && phoneField1.length === 14))
         {
             let result = await Api.updatePhoneADM(user.idAdm, phoneField1, phoneField2);
-            
             if(result)
             {
-                Alert.alert("Telefone alterado com sucesso!");
-                navigation.goBack();
+                setAlert(true, "Aviso:", "Telefone alterado com sucesso!");
             }              
         }
         else
         {
-            Alert.alert("Preencha o/os campo(s)!");
+            setAlert(true, "Erro ao alterar o telefone:", "Preencha o/os campo(s) corretamente!");
         }
     }
 
@@ -96,8 +103,8 @@ export default () => {
                     IconSvg = { PhoneIcon }
                     placeholder = "Número do celular (1)"
                     value = { phoneMask(phoneField1) }
-                    onChangeText = { t => setPhoneField1(t) }
-                    maxLength = { 14 }    
+                    onChangeText = { (t) => setPhoneField1(t) }
+                    maxLength = { 14 }
                     minLength = { 14 }
                 />
 
@@ -105,8 +112,8 @@ export default () => {
                     IconSvg = { PhoneIcon }
                     placeholder = "Número do celular (2)"
                     value = { phoneMask(phoneField2) }
-                    onChangeText = { t => setPhoneField2(t) }
-                    maxLength = { 14 }    
+                    onChangeText = { (t) => setPhoneField2(t) }
+                    maxLength = { 14 }
                     minLength = { 14 }
                 />
 
@@ -118,6 +125,15 @@ export default () => {
             <BackButton onPress = { handleBackButtonClick } >
                 <BackIcon width = "44" height = "44" fill = "#FFF" />
             </BackButton>
+
+            <AlertCustom
+                showAlert = { alertVisible }
+                setShowAlert = { setAlertVisible }
+                alertTitle = { alertTitle }
+                alertMessage = { alertMessage }
+                displayNegativeButton = { true }
+                negativeText = { 'OK' }
+            />
         </Container>
     );
 }

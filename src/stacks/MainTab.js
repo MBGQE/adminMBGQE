@@ -11,7 +11,7 @@ import CustomTabBar from '../components/CustomTabBar';
 const Tab = createBottomTabNavigator();
 
 export default () => (
-    <Tab.Navigator tabBar ={ props => < CustomTabBar {...props} /> } >
+    <Tab.Navigator tabBar = { props => < CustomTabBar {...props} /> } >
         <Tab.Screen name = "Appointments" component = { Appointments } />
         <Tab.Screen name = "OperationWindow" component = { OperationWindow } />
         <Tab.Screen name = "SCProfile" component = { SCProfile } />

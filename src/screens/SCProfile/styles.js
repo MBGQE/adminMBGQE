@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+
 import Colors from '../../assets/Themes/Colors';
 
 export const Container = styled.SafeAreaView`
@@ -28,7 +29,7 @@ export const MenuButton = styled.TouchableOpacity`
 `;
 
 export const UserInfoArea = styled.View`
-    flex-direction: row;    
+    flex-direction: row;
     margin-left: 30px;
     margin-right: 30px;
     margin-top: 30px;
@@ -36,7 +37,7 @@ export const UserInfoArea = styled.View`
 
 export const AvatarArea = styled.View`
     border-width: 5px;
-    border-color: #FFF;    
+    border-color: #FFF;
     border-radius: 20px;
 `;
 
@@ -82,7 +83,7 @@ export const PhotoItem = styled.TouchableOpacity`
     width: 115px;
     height: 115px;
     border-width: 5px;
-    border-color: #FFF;    
+    border-color: #FFF;
     border-radius: 20px;
     margin-top: 10px;
     margin-right: 5px;
@@ -105,7 +106,7 @@ export const CustomButton = styled.TouchableOpacity`
     margin-right: 35px;
     align-items: center;
     justify-content: center;
-    border-radius: 30px;    
+    border-radius: 30px;
 `;
 
 export const CustomButtonText = styled.Text`

@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { RefreshControl } from 'react-native';
+
 import ImagePicker from 'react-native-image-crop-picker';
 
 import {
     Container,
     Scroller,
+
     LoadingIcon,
+
     ProfileArea,
     MenuButton,
 
@@ -12,16 +16,18 @@ import {
     AvatarArea,
     UserAvatarUpdate,
     UserAvatar,
+
     UserInfo,
     UserInfoName,
 
     PhotosArea,
     PhotosItemArea,
+
     PhotoItem,
     Photo,
 
     CustomButton,
-    CustomButtonText
+    CustomButtonText,
 } from './styles';
 
 import { UserContext } from '../../context/UserContext';
@@ -32,15 +38,15 @@ import AccountIcon from '../../assets/Images/account.svg';
 import SCMenuModal from '../../components/SCMenuModal';
 
 import Api from '../../Api';
-import { Alert } from 'react-native';
+import AlertCustom from '../../components/AlertCustom';
 
 export default () => {
-
     const { state: user } = useContext(UserContext);
 
     const [quadraInfo, setQuadraInfo] = useState('');
     const [showModalMenu, setShowModalMenu] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     const [photoField1, setPhotoField1] = useState('');
     const [photoField2, setPhotoField2] = useState('');
@@ -50,10 +56,20 @@ export default () => {
     const [photoUrl2, setPhotoUrl2] = useState(null);
     const [photoUrl3, setPhotoUrl3] = useState(null);
 
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const setAlert = (visible = false, title = '', message = '') => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
+
     const getQuadraInfo = async () => {
         setLoading(true);
         let result = await Api.LoadSportCourt(user.idCourt);
-        if(result.exists)
+        if (result.exists) 
         {
             setQuadraInfo(result.data());
         }
@@ -62,14 +78,14 @@ export default () => {
 
     useEffect(() => {
         getQuadraInfo();
-    }, []);
+    }, [])
 
     useEffect(() => {
         const awaitImage = async () => {
-            if(photoField1 != '')
+            if (photoField1 != '') 
             {
                 let result = await Api.uploadPhotosCourt(user.idCourt, photoField1);
-                if(result != '')
+                if (result != '') 
                 {
                     setPhotoUrl1(result);
                 }
@@ -80,10 +96,10 @@ export default () => {
 
     useEffect(() => {
         const awaitImage = async () => {
-            if(photoField2 != '')
+            if (photoField2 != '') 
             {
                 let result = await Api.uploadPhotosCourt(user.idCourt, photoField2);
-                if(result != '')
+                if (result != '') 
                 {
                     setPhotoUrl2(result);
                 }
@@ -94,10 +110,10 @@ export default () => {
 
     useEffect(() => {
         const awaitImage = async () => {
-            if(photoField3 != '')
+            if (photoField3 != '') 
             {
                 let result = await Api.uploadPhotosCourt(user.idCourt, photoField3);
-                if(result != '')
+                if (result != '') 
                 {
                     setPhotoUrl3(result);
                 }
@@ -107,27 +123,27 @@ export default () => {
     }, [photoField3]);
 
     const handleUpdateAvatar = async () => {
-        let imagePath = '';
         await ImagePicker.openPicker({
             cropping: true
         })
-        .then(image => {
-            console.log(image);
-            imagePath = image.path;
+        .then(async({path}) => {
+            setLoading(true);
+            console.log(path);
+            if(path !== "")
+            {
+                const result = await Api.uploadImageAdm(user.idAdm, path);
+                const upAvatar = await Api.updateAvatarAdm(user.idAdm, result);
+                if(upAvatar)
+                {
+                    setAlert(true, "Aviso", "Avatar atualizado com sucesso!");
+                    UserInfoData();
+                }
+            }
+            setLoading(false);
         })
         .catch(error => {
-            console.log("Error: ", error.message);
+            console.log(error);
         });
-        if(imagePath != '')
-        {
-            let result = await Api.uploadImageCourt(user.idCourt, imagePath);
-            let upAvatar = await Api.updateAvatarCourt(user.idCourt, result);
-            if(upAvatar)
-            {
-                Alert.alert("Avatar atualizado com sucesso!");
-                getQuadraInfo();
-            }
-        }        
     }
 
     const handleMenuButtonClick = () => {
@@ -136,79 +152,97 @@ export default () => {
 
     const handleImage1Click = async () => {
         await ImagePicker.openPicker({
-            cropping: true
+            cropping: true,
         })
-        .then(image => {
+        .then((image) => {
             setPhotoField1(image.path);
         })
-        .catch(error => {
-            console.log("Error: ", error.message);
+        .catch((error) => {
+            console.log(error);
         });
     }
 
     const handleImage2Click = async () => {
         await ImagePicker.openPicker({
-            cropping: true
+            cropping: true,
         })
-        .then(image => {
+        .then((image) => {
             setPhotoField2(image.path);
         })
-        .catch(error => {
-            console.log("Error: ", error.message);
+        .catch((error) => {
+            console.log(error);
         });
     }
 
     const handleImage3Click = async () => {
         await ImagePicker.openPicker({
-            cropping: true
+            cropping: true,
         })
-        .then(image => {
+        .then((image) => {
             setPhotoField3(image.path);
         })
-        .catch(error => {
-            console.log("Error: ", error.message);
+        .catch((error) => {
+            console.log(error);
         });
     }
 
     const handleFinishClick = async () => {
-        if(photoUrl1 != null && photoUrl2 != null && photoUrl3 != null)
+        if (photoUrl1 != null && photoUrl2 != null && photoUrl3 != null)
         {
+            setLoading(true);
             let result = await Api.updatePhotosCourt(user.idCourt, photoUrl1, photoUrl2, photoUrl3);
-            if(result)
+            if (result) 
             {
-                Alert.alert("As fotos do local foram atualizadas com sucesso!");
+                setAlert(true, 'Aviso:', 'As fotos do local foram atualizadas com sucesso!');
             }
-        }
-        else
+            setLoading(false);
+        } 
+        else 
         {
-            Alert.alert("Não foram adicionadas todas as fotos!");
+            setAlert(true, 'Não foram adicionadas todas as fotos!');
         }
     }
 
-    return(
+    const onRefresh = () => {
+        setRefreshing(false);
+        getQuadraInfo();
+    }
+
+    return (
         <Container>
-            <Scroller>
+            <Scroller
+                refreshControl = 
                 {
-                    loading
-                    &&
+                    <RefreshControl refreshing = { refreshing } onRefresh = { onRefresh } />
+                }
+            >
+
+                {
+                    loading && 
                     <LoadingIcon size = "large" color = "#FFF" />
                 }
+
                 <ProfileArea>
                     <UserInfoArea>
                         <AvatarArea>
-                            <UserAvatarUpdate onPress = { handleUpdateAvatar } >
+                            <UserAvatarUpdate onPress = { handleUpdateAvatar }>
                                 {
-                                    quadraInfo.avatar != '' ?
+                                    quadraInfo.avatar != '' ? 
+                                    (
                                         <UserAvatar source = {{ uri: quadraInfo.avatar }} />
-                                        :
+                                    ) 
+                                    : 
+                                    (
                                         <AccountIcon width = "150" height = "150" fill = "#FFF" />
+                                    )
                                 }
                             </UserAvatarUpdate>
                         </AvatarArea>
 
-                        <UserInfo >
+                        <UserInfo>
                             <UserInfoName>{ quadraInfo.name }</UserInfoName>
                         </UserInfo>
+                        
                     </UserInfoArea>
                 </ProfileArea>
 
@@ -216,45 +250,67 @@ export default () => {
                     <PhotosItemArea>
                         <PhotoItem onPress = { handleImage1Click } >
                             {
-                                photoField1 != '' ?
-                                <Photo source = {{ uri: photoField1 }} />
-                                :
-                                <PhotoIcon width = "100" height = "100" fill = "#FFF" />
-                            } 
+                                photoField1 != '' ? 
+                                (
+                                    <Photo source = {{ uri: photoField1 }} />
+                                ) 
+                                : 
+                                (
+                                    <PhotoIcon width = "100" height = "100" fill = "#FFF" />
+                                )
+                            }
                         </PhotoItem>
 
                         <PhotoItem onPress = { handleImage2Click } >
                             {
-                                photoField2 != '' ?
-                                <Photo source = {{ uri: photoField2 }} />
-                                :
-                                <PhotoIcon width = "100" height = "100" fill = "#FFF" />
-                            }                 
+                                photoField2 != '' ? 
+                                (
+                                    <Photo source = {{ uri: photoField2 }} />
+                                ) 
+                                : 
+                                (
+                                    <PhotoIcon width = "100" height = "100" fill = "#FFF" />
+                                )
+                            }
                         </PhotoItem>
 
                         <PhotoItem onPress = { handleImage3Click } >
                             {
-                                photoField3 != '' ?
-                                <Photo source = {{ uri: photoField3 }} />
-                                :
-                                <PhotoIcon width = "100" height = "100" fill = "#FFF" />
-                            }                 
+                                photoField3 != '' ? 
+                                (
+                                    <Photo source = {{ uri: photoField3 }} />
+                                ) 
+                                : 
+                                (
+                                    <PhotoIcon width = "100" height = "100" fill = "#FFF" />
+                                )
+                            }
                         </PhotoItem>
+
                     </PhotosItemArea>
                 </PhotosArea>
 
                 <CustomButton onPress = { handleFinishClick } >
                     <CustomButtonText>Finalizar Escolha das Fotos</CustomButtonText>
-                </CustomButton>                            
+                </CustomButton>
             </Scroller>
 
-            <MenuButton onPress = { handleMenuButtonClick } >
+            <MenuButton onPress = {handleMenuButtonClick } >
                 <MenuIcon width = "25" height = "25" fill = "#FFF" />
             </MenuButton>
 
-            <SCMenuModal
+            <SCMenuModal 
                 show = { showModalMenu }
-                setShow = { setShowModalMenu }
+                setShow = { setShowModalMenu } 
+            />
+
+            <AlertCustom
+                showAlert = { alertVisible }
+                setShowAlert = { setAlertVisible }
+                alertTitle = { alertTitle }
+                alertMessage = { alertMessage }
+                displayNegativeButton = { true }
+                negativeText = { 'OK' }
             />
         </Container>
     );

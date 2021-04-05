@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import Colors from '../../assets/Themes/Colors';
 
 export const Container = styled.SafeAreaView`
-    flex: 1;   
+    flex: 1;
     background-color: ${ Colors.primary };
 `;
 
@@ -13,7 +13,7 @@ export const BackButton = styled.TouchableOpacity`
     left: 0;
     top: 25px;
     z-index: 0;
-`
+`;
 
 export const HeaderArea = styled.View`
     flex-direction: row;
@@ -21,7 +21,7 @@ export const HeaderArea = styled.View`
     align-items: center;
     margin-top: 33px;
     margin-bottom: 30px;
-    margin-left: 50px;    
+    margin-left: 50px;
 `;
 
 export const HeaderTitle = styled.Text`
@@ -33,7 +33,7 @@ export const HeaderTitle = styled.Text`
 export const ListArea = styled.View``;
 
 export const DateArea = styled.View`
-    background-color: #FFF;
+    background-color: #fff;
     border-radius: 10px;
     margin-bottom: 15px;
     margin-left: 20px;

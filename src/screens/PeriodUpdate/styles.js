@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+
 import Colors from '../../assets/Themes/Colors';
 
 export const Container = styled.SafeAreaView`
@@ -55,7 +56,7 @@ export const DatePrevArea = styled.TouchableOpacity`
 export const DateTitleArea = styled.View`
     width: 140px;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
 `;
 
 export const DateTitle = styled.Text`

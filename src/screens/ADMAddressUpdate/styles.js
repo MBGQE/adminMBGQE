@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components/native';
 
 import Colors from '../../assets/Themes/Colors';
@@ -44,7 +43,7 @@ export const InputAreaInfo = styled.View`
 export const TextRequesited = styled.Text`
     font-size: 18px;
     color: ${ Colors.textError };
-    margin-bottom: 10px
+    margin-bottom: 10px;
 `;
 
 export const CustomButton = styled.TouchableOpacity`

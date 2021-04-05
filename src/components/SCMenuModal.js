@@ -27,7 +27,7 @@ export default ({ show, setShow }) => {
 
     const handleAddServicesClick = () => {
         setShow(false);
-        navigation.navigate('Services');        
+        navigation.navigate('Services');
     }
 
     const handlePeriodUpdateClick = () => {
@@ -35,11 +35,11 @@ export default ({ show, setShow }) => {
         navigation.navigate('PeriodUpdate');
     }
 
-    return(
-        <Modal
-            transparent = { true }
-            visible = { show }
-            animationType = 'fade'
+    return (
+        <Modal 
+            transparent = { true } 
+            visible = { show } 
+            animationType = "fade"
         >
             <ModalArea>
                 <CloseButton onPress = { handleCloseButtonClick } >
@@ -55,13 +55,12 @@ export default ({ show, setShow }) => {
                 </CustomButton>
 
                 <CustomButton onPress = { handleAddServicesClick } >
-                    <CustomButtonText>Adicionar Quadras</CustomButtonText>
+                    <CustomButtonText>Adicionar Quadra</CustomButtonText>
                 </CustomButton>
 
                 <CustomButton onPress = { handlePeriodUpdateClick } >
-                    <CustomButtonText>Atualizar Periodo de Funcionamento</CustomButtonText>
+                    <CustomButtonText>Atualizar Periodo</CustomButtonText>
                 </CustomButton>
-
             </ModalArea>
         </Modal>
     );

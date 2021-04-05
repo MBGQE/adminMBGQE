@@ -9,7 +9,6 @@ import PasswordModal from './PasswordModal';
 import Colors from '../assets/Themes/Colors';
 
 export default ({ show, setShow }) => {
-
     const navigation = useNavigation();
 
     const [showModalPassword, setShowModalPassword] = useState(false);
@@ -33,10 +32,10 @@ export default ({ show, setShow }) => {
     }
 
     return (
-        <Modal
-            transparent = { true }
-            visible = { show }
-            animationType = 'fade'
+        <Modal 
+            transparent = { true } 
+            visible = { show } 
+            animationType = "fade" 
         >
             <ModalArea>
                 <CloseButton onPress = { handleCloseButtonCLick } >
@@ -84,7 +83,7 @@ const CloseButton = styled.TouchableOpacity`
 export const CustomButton = styled.TouchableOpacity`
     height: 50px;
     width: 100%;
-    background-color: ${ Colors.secundary };
+    background-color: ${Colors.secundary};
     border-radius: 30px;
     justify-content: center;
     align-items: center;

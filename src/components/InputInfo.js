@@ -5,7 +5,7 @@ import Colors from '../assets/Themes/Colors';
 const InputArea = styled.View`
     width: 65%;
     height: 60px;
-    background: #FFF;
+    background: #fff;
     flex-direction: row;
     border-radius: 30px;
     padding-left: 15px;
@@ -18,7 +18,6 @@ const Input = styled.TextInput`
     font-size: 16px;
     color: ${ Colors.primary }
     margin-left: 10px;
-    fontFamily: monospace;
 `;
 
 const TextRequesited = styled.Text`
@@ -27,8 +26,7 @@ const TextRequesited = styled.Text`
 `;
 
 export default ({ placeholder, value, onChangeText, requesited }) => {
-
-    return(
+    return (
         <InputArea>
             <Input
                 placeholder = { placeholder }
@@ -38,9 +36,10 @@ export default ({ placeholder, value, onChangeText, requesited }) => {
             />
 
             {
-                requesited &&
-                <TextRequesited>{ "*" }</TextRequesited>
+                requesited 
+                && 
+                <TextRequesited>*</TextRequesited>
             }
-        </InputArea>       
-    );
+        </InputArea>
+    )
 }

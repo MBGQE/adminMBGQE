@@ -10,6 +10,7 @@ export const Container = styled.SafeAreaView`
 
 export const Scroller = styled.ScrollView`
     flex: 1;
+    background-color: ${ Colors.primary };
 `;
 
 export const LoadingIcon = styled.ActivityIndicator`

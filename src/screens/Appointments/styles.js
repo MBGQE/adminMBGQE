@@ -6,7 +6,8 @@ import Colors from '../../assets/Themes/Colors';
 export const Container = styled.SafeAreaView`
     flex: 1;
     background-color: ${ Colors.primary };
-`
+`;
+
 export const HeaderArea = styled.View`
     margin-top: 33px;
     margin-bottom: 30px;
