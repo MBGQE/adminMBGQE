@@ -88,10 +88,10 @@ export default () => {
                 if(upAvatar)
                 {
                     setAlert(true, "Aviso", "Avatar atualizado com sucesso!");
+                    setLoading(false);
                     UserInfoData();
                 }
             }
-            setLoading(false);
         })
         .catch(error => {
             console.log(error);
@@ -100,6 +100,7 @@ export default () => {
 
     const handleSignOutClick = async () => {
         await Api.logout();
+        setUserInfo('');
         navigation.reset({
             routes: [{name: 'Preload'}],
         });

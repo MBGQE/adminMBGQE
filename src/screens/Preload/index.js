@@ -1,13 +1,12 @@
 import React, { useContext, useEffect } from 'react';
-
+import { Container, LoadingIcon } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
-import { UserContext } from '../../context/UserContext';
-
-import { Container, LoadingIcon } from './styles';
-
 import FootLogo from '../../assets/Images/football.svg';
+
 import Api from '../../Api';
+
+import { UserContext } from '../../context/UserContext';
 
 export default () => {
     const navigation = useNavigation();
