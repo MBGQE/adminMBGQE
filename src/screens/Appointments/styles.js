@@ -40,6 +40,12 @@ export const EmptyHeader = styled.View`
     align-items: center;
 `;
 
+export const EmptyToday = styled.Text`
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFF;
+`;
+
 export const EmptyTitle = styled.Text`
     font-size: 20px;
     font-weight: bold;

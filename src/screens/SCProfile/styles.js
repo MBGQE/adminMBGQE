@@ -36,7 +36,7 @@ export const UserInfoArea = styled.View`
 `;
 
 export const AvatarArea = styled.View`
-    border-width: 5px;
+    border-width: 3px;
     border-color: #FFF;
     border-radius: 20px;
 `;
@@ -47,6 +47,17 @@ export const UserAvatar = styled.Image`
     width: 150px;
     height: 150px;
     border-radius: 20px;
+`;
+
+export const AvatarIcon = styled.View`
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+    border-width: 3px;
+    border-color: ${ Colors.primary };
+    background-color: #FFF;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const UserInfo = styled.View`

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/native';
+
 import Colors from '../assets/Themes/Colors';
 
 const InputArea = styled.View`
-    width: 65%;
+    width: 60%;
     height: 60px;
     background: #fff;
     flex-direction: row;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+
 import Colors from '../assets/Themes/Colors';
 
 const InputArea = styled.View`

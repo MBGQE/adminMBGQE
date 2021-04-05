@@ -244,6 +244,8 @@ export default () => {
         {
             await Api.setPeriod(user.idCourt, selectedDay, selectedMonth, selectedYear, selectedHour);
             setAlert(true, 'Aviso:', 'O registro foi efetuado com sucesso!');
+            setSelectedDay(0);
+            setSelectedHour([]);
         } 
         else 
         {
