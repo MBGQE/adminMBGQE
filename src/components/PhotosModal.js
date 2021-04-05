@@ -7,10 +7,9 @@ import ExpandIcon from '../assets/Images/expand.svg';
 import PhotoIcon from '../assets/Images/photo.svg';
 
 import Api from '../Api';
-import { Alert } from 'react-native';
+import AlertCustom from '../components/AlertCustom';
 
 export default ({ show, setShow, sportCourt }) => {
-
     const [photoField1, setPhotoField1] = useState('');
     const [photoField2, setPhotoField2] = useState('');
     const [photoField3, setPhotoField3] = useState('');
@@ -19,12 +18,22 @@ export default ({ show, setShow, sportCourt }) => {
     const [photoUrl2, setPhotoUrl2] = useState(null);
     const [photoUrl3, setPhotoUrl3] = useState(null);
 
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const setAlert = (visible = false, title = '', message = '') => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
+
     useEffect(() => {
         const awaitImage = async () => {
-            if(photoField1 != '')
+            if (photoField1 != '') 
             {
                 let result = await Api.uploadPhotosCourt(sportCourt.idQuadra, photoField1);
-                if(result != '')
+                if (result != '') 
                 {
                     setPhotoUrl1(result);
                 }
@@ -35,10 +44,10 @@ export default ({ show, setShow, sportCourt }) => {
 
     useEffect(() => {
         const awaitImage = async () => {
-            if(photoField2 != '')
+            if (photoField2 != '') 
             {
                 let result = await Api.uploadPhotosCourt(sportCourt.idQuadra, photoField2);
-                if(result != '')
+                if (result != '') 
                 {
                     setPhotoUrl2(result);
                 }
@@ -49,10 +58,10 @@ export default ({ show, setShow, sportCourt }) => {
 
     useEffect(() => {
         const awaitImage = async () => {
-            if(photoField3 != '')
+            if (photoField3 != '') 
             {
                 let result = await Api.uploadPhotosCourt(sportCourt.idQuadra, photoField3);
-                if(result != '')
+                if (result != '') 
                 {
                     setPhotoUrl3(result);
                 }
@@ -67,54 +76,54 @@ export default ({ show, setShow, sportCourt }) => {
 
     const handleImage1Click = async () => {
         await ImagePicker.openPicker({
-            cropping: true
+            cropping: true,
         })
-        .then(image => {
+        .then((image) => {
             setPhotoField1(image.path);
         })
-        .catch(error => {
-            console.log("Error: ", error.message);
+        .catch((error) => {
+            console.log('Error: ', error.message);
         });
     }
 
     const handleImage2Click = async () => {
         await ImagePicker.openPicker({
-            cropping: true
+            cropping: true,
         })
-        .then(image => {
+        .then((image) => {
             setPhotoField2(image.path);
         })
-        .catch(error => {
-            console.log("Error: ", error.message);
+        .catch((error) => {
+            console.log('Error: ', error.message);
         });
     }
 
     const handleImage3Click = async () => {
         await ImagePicker.openPicker({
-            cropping: true
+            cropping: true,
         })
-        .then(image => {
+        .then((image) => {
             setPhotoField3(image.path);
         })
-        .catch(error => {
-            console.log("Error: ", error.message);
+        .catch((error) => {
+            console.log('Error: ', error.message);
         });
     }
 
     const handleFinishClick = async () => {
         let result = await Api.updatePhotosCourt(sportCourt.idQuadra, photoUrl1, photoUrl2, photoUrl3);
-        if(result)
+        if (result)
         {
-            Alert.alert("Fotos do local atualizados com sucesso.");
+            setAlert(true, 'Alerta:', 'As fotos do local foram atualizadas com sucesso!');
             setShow(false);
         }
     }
 
-    return(
-        <Modal
-            transparent = { true }
-            visible = { show }
-            animationType = 'slide'
+    return (
+        <Modal 
+            transparent = { true } 
+            visible = { show } 
+            animationType = "slide"
         >
             <ModalArea>
                 <CloseButton onPress = { handleCloseButtonClick } >
@@ -122,43 +131,64 @@ export default ({ show, setShow, sportCourt }) => {
                 </CloseButton>
 
                 <PhotosArea>
-                        <PhotoItem onPress = { handleImage1Click } >
+                    <PhotoItem onPress = { handleImage1Click } >
                         {
-                            photoField1 != '' ?
-                            <Photo source = {{ uri: photoField1 }} />
-                            :
-                            <PhotoIcon width = "125" height = "125" fill = "#FFF" />
-                        } 
+                            photoField1 != '' ? 
+                            (
+                                <Photo source = {{ uri: photoField1 }} />
+                            ) 
+                            : 
+                            (
+                                <PhotoIcon width = "125" height = "125" fill = "#FFF" />
+                            )
+                        }
                     </PhotoItem>
 
                     <PhotoItem onPress = { handleImage2Click } >
                         {
-                            photoField2 != '' ?
-                            <Photo source = {{ uri: photoField2 }} />
-                            :
-                            <PhotoIcon width = "125" height = "125" fill = "#FFF" />
-                        }                 
+                            photoField2 != '' ? 
+                            (
+                                <Photo source = {{ uri: photoField2 }} />
+                            ) 
+                            : 
+                            (
+                                <PhotoIcon width = "125" height = "125" fill = "#FFF" />
+                            )
+                        }
                     </PhotoItem>
 
                     <PhotoItem onPress = { handleImage3Click } >
                         {
-                            photoField3 != '' ?
-                            <Photo source = {{ uri: photoField3 }} />
-                            :
-                            <PhotoIcon width = "125" height = "125" fill = "#FFF" />
-                        }                 
+                            photoField3 != '' ? 
+                            (
+                                <Photo source = {{ uri: photoField3 }} />
+                            ) 
+                            : 
+                            (
+                                <PhotoIcon width = "125" height = "125" fill = "#FFF" />
+                            )
+                        }
                     </PhotoItem>
-                </PhotosArea>                               
+                </PhotosArea>
 
                 <CustomButton onPress = { handleFinishClick } >
                     <CustomButtonText>Finalizar</CustomButtonText>
                 </CustomButton>
             </ModalArea>
+
+            <AlertCustom
+                showAlert = { alertVisible }
+                setShowAlert = { setAlertVisible } 
+                alertTitle = { alertTitle }
+                alertMessage = { alertMessage }
+                displayNegativeButton = { true }
+                negativeText = { "OK" }
+            />
         </Modal>
-    );
+    )
 }
 
-const Modal = styled.Modal``;
+const Modal = styled.Modal``
 
 const CloseButton = styled.TouchableOpacity`
     width: 40px;
@@ -176,7 +206,7 @@ const PhotosArea = styled.View`
     margin-top: 30px;
     flex: 1;
     border-width: 5px;
-    border-color: #FFF;    
+    border-color: #FFF;
     border-radius: 20px;
 `;
 
@@ -201,7 +231,7 @@ const Photo = styled.Image`
 const CustomButton = styled.TouchableOpacity`
     height: 50px;
     border-width: 5px;
-    border-color: #FFF;    
+    border-color: #FFF;
     border-radius: 20px;
     justify-content: center;
     align-items: center;

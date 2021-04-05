@@ -6,17 +6,19 @@ import { UserContext } from '../../context/UserContext';
 
 import {
     Container,
+
     BackButton,
-    UpAddressHeader, 
-    UpAddressTitle, 
-    
+
+    UpAddressHeader,
+    UpAddressTitle,
+
     InputArea,
     InputAreaAddress,
     InputAreaInfo,
 
     CustomButton,
-    CustomButtonText
-} from './styles'
+    CustomButtonText,
+} from './styles';
 
 import BackIcon from '../../assets/Images/back.svg';
 
@@ -30,7 +32,7 @@ import { cepMask } from '../../Mask';
 import cep from 'cep-promise';
 
 import Api from '../../Api';
-import { Alert } from 'react-native';
+import AlertCustom from '../../components/AlertCustom';
 
 export default () => {
     const navigation = useNavigation();
@@ -44,36 +46,61 @@ export default () => {
     const [stateField, setStateField] = useState('');
     const [cityField, setCityField] = useState('');
 
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const setAlert = (visible = false, title = '', message = '') => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
+
     const handleBackButtonClick = () => {
         navigation.goBack();
     }
 
     const fetchCep = async () => {
         await cep(cepField)
-            .then(result => {
-                setStateField(result.state);
-                setCityField(result.city);
-                setNeighborhoodField(result.neighborhood);
-                setStreetField(result.street);
+            .then((result) => {
+                setStateField(result.state)
+                setCityField(result.city)
+                setNeighborhoodField(result.neighborhood)
+                setStreetField(result.street)
             })
             .catch(() => {
-                Alert.alert("O CEP informado é inválido!");
+                setAlert(true, 'Erro ao atualizar o endereço:', 'O CEP informado não é válido!');
             });
     }
 
     const handleAddressUpdate = async () => {
-        if(cepField != '' && streetField != '' && numberField != '' && neighborhoodField != '' && cityField != '' && stateField != '')
+        if (
+            cepField != '' &&
+            streetField != '' &&
+            numberField != '' &&
+            neighborhoodField != '' &&
+            cityField != '' &&
+            stateField != ''
+        ) 
         {
-            let result = await Api.updateAddressSC(user.idCourt, cepField, streetField, numberField, neighborhoodField, cityField, stateField);
-            if(result)
+            let result = await Api.updateAddressSC(
+                user.idCourt,
+                cepField,
+                streetField,
+                numberField,
+                neighborhoodField,
+                cityField,
+                stateField
+            )
+            if (result) 
             {
-                Alert.alert("O endereço foi atualizado com sucesso!");
+                setAlert(true, 'Aviso:', 'O endereço foi atualizado com sucesso!');
                 navigation.goBack();
             }
-        }
-        else
+        } 
+        else 
         {
-            Alert.alert("Preencha os campos!");
+            setAlert(true, 'Atenção:', 'Preencha todos os campos!');
         }
     }
 
@@ -84,7 +111,7 @@ export default () => {
             </UpAddressHeader>
 
             <InputArea>
-                <InputCep
+            <InputCep
                     placeholder = "Cep"
                     value = { cepMask(cepField) }
                     onChangeText = { (t) => setCepField(t) }
@@ -94,43 +121,54 @@ export default () => {
                 />
                 <InputAreaAddress>
                     <InputText
-                        placeholder = { streetField != '' ? streetField : "Rua" }
+                        placeholder = { streetField != '' ? streetField : 'Rua' }
                         value = { streetField }
-                        onChangeText = { t => setStreetField(t) }
+                        onChangeText = { (t) => setStreetField(t) }
                     />
                     <InputAreaInfo>
                         <InputInfo
-                            placeholder = { neighborhoodField != '' ? neighborhoodField : "Bairro" }
+                            placeholder = { neighborhoodField != '' ? neighborhoodField : 'Bairro' }
                             value = { neighborhoodField }
-                            onChangeText = { t => setNeighborhoodField(t) }
+                            onChangeText = { (t) => setNeighborhoodField(t) }
                         />
                         <InputNumberStreet
                             placeholder = "Nº"
                             value = { numberField }
-                            onChangeText = { t => setNumberField(t) }
+                            onChangeText = { (t) => setNumberField(t) }
                         />
                     </InputAreaInfo>
+
                     <InputAreaInfo>
                         <InputInfo
-                            placeholder = { cityField != '' ? cityField : "Cidade" }
+                            placeholder = { cityField != '' ? cityField : 'Cidade' }
                             value = { cityField }
-                            onChangeText = { t => setCityField(t) }
+                            onChangeText = { (t) => setCityField(t) }
                         />
                         <InputUF
-                            placeholder = { stateField != '' ? stateField : "Estado" }
+                            placeholder = { stateField != '' ? stateField : 'Estado' }
                             value = { stateField }
-                            onChangeText = { t => setStateField(t) }
+                            onChangeText = { (t) => setStateField(t) }
                         />
                     </InputAreaInfo>
                 </InputAreaAddress>
-                <CustomButton onPress = { handleAddressUpdate } >
+
+                <CustomButton onPress = { handleAddressUpdate }>
                     <CustomButtonText>Atualizar Endereço</CustomButtonText>
-                </CustomButton>                
+                </CustomButton>
             </InputArea>
 
-            <BackButton onPress = { handleBackButtonClick } >
+            <BackButton onPress = { handleBackButtonClick }>
                 <BackIcon width = "44" height = "44" fill = "#FFF" />
             </BackButton>
+
+            <AlertCustom
+                showAlert = { alertVisible }
+                setShowAlert = { setAlertVisible }
+                alertTitle = { alertTitle }
+                alertMessage = { alertMessage }
+                displayNegativeButton = { true }
+                negativeText = { 'OK' }
+            />
         </Container>
     );
 }

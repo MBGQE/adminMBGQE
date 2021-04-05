@@ -10,7 +10,7 @@ import Colors from '../assets/Themes/Colors';
 
 const TabArea = styled.View`
     height: 60px;
-    background-color: ${Colors.secundary};
+    background-color: ${ Colors.secundary };
     flex-direction: row;
 `;
 
@@ -20,13 +20,12 @@ const TabItem = styled.TouchableOpacity`
     align-items: center;
 `;
 
-export default ({ state, navigation }) => {    
-    
+export default ({ state, navigation }) => {
     const goTo = (screenName) => {
         navigation.navigate(screenName);
     }
 
-    return(
+    return (
         <TabArea>
             <TabItem onPress = { () => goTo('Appointments') } >
                 <TodayIcon style = {{ opacity: state.index === 0 ? 1 : 0.5 }} width = "30" height = "30" fill = "#FFF" />

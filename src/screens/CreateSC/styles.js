@@ -22,7 +22,7 @@ export const HeaderTitle = styled.Text`
 
 export const Scroller = styled.ScrollView`
     background-color: ${ Colors.primary };
-    flex: 1; 
+    flex: 1;
 `;
 
 export const InputAreaAddress = styled.View``;
@@ -40,7 +40,7 @@ export const InputAreaInfo = styled.View`
 export const TextRequesited = styled.Text`
     font-size: 18px;
     color: ${ Colors.textError };
-    margin-bottom: 10px
+    margin-bottom: 10px;
 `;
 
 export const CustomButton = styled.TouchableOpacity`

@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import { UserContext } from '../../context/UserContext';
 
+import AlertCustom from '../../components/AlertCustom';
+
 import {
     Container,
     BackButton,
@@ -16,10 +18,12 @@ import {
     DateInfo,
     DatePrevArea,
     DataNextArea,
+
     DateTitleArea,
     DateTitle,
 
     DateList,
+
     DateItem,
     DateItemWeekDay,
     DateItemNumber,
@@ -29,11 +33,12 @@ import {
     TimeArea,
     TimeItem,
     TimeText,
+
     CheckItem,
 
     ButtonArea,
-    FinishButton, 
-    FinishButtonText
+    FinishButton,
+    FinishButtonText,
 } from './styles';
 
 import BackIcon from '../../assets/Images/back.svg';
@@ -41,7 +46,6 @@ import NavPrevIcon from '../../assets/Images/nav_prev.svg';
 import NavNextIcon from '../../assets/Images/nav_next.svg';
 
 import Api from '../../Api';
-import { Alert } from 'react-native';
 
 import Colors from '../../assets/Themes/Colors';
 
@@ -57,23 +61,14 @@ const months = [
     'Setembro',
     'Outubro',
     'Novembro',
-    'Dezembro'
+    'Dezembro',
 ];
 
-const days = [
-    'Dom',
-    'Seg',
-    'Ter',
-    'Qua',
-    'Qui',
-    'Sex',
-    'Sab'
-];
+const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
 
 const HoursDate = require('../../Hours.json');
 
 export default () => {
-
     const navigation = useNavigation();
 
     const [selectedYear, setSelectedYear] = useState(0);
@@ -84,30 +79,40 @@ export default () => {
 
     const [data, setData] = useState([]);
     const [listDays, setListDays] = useState([]);
-    
+
     const [selectedHour, setSelectedHour] = useState([]);
+
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const setAlert = (visible = false, title = '', message = '') => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
 
     const { state: user } = useContext(UserContext);
 
     useEffect(() => {
         let unsub = Api.onPeriod(user.idCourt, setListPeriod);
         return unsub;
-    }, []);
+    }, [])
 
     useEffect(() => {
         let today = new Date();
         setSelectedYear(today.getFullYear());
         setSelectedMonth(today.getMonth());
-        setSelectedDay(today.getDate());        
-    }, []);
+        setSelectedDay(today.getDate());
+    }, [])
 
     useEffect(() => {
-        if(listPeriod)
+        if (listPeriod) 
         {
             let daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
             let newListDays = [];
 
-            for(let i = 1; i <= daysInMonth; i++)
+            for (let i = 1; i <= daysInMonth; i++) 
             {
                 let d = new Date(selectedYear, selectedMonth, i);
                 let year = d.getFullYear();
@@ -117,58 +122,55 @@ export default () => {
                 day = day < 10 ? '0' + day : day;
                 let selDate = `${day}/${month}/${year}`;
 
-                let availability = listPeriod.filter(e => 
-                    e.data === selDate
-                );
+                let availability = listPeriod.filter((e) => e.data === selDate);
 
                 newListDays.push({
                     status: availability.length > 0 ? false : true,
                     weekday: days[d.getDay()],
-                    number: i
+                    number: i,
                 });
             }
             setListDays(newListDays);
             setSelectedDay(0);
             setData([]);
         }
-        
     }, [listPeriod, selectedMonth, selectedYear]);
 
     useEffect(() => {
         const verifyDate = async () => {
-            if(selectedDay > 0)
+            if (selectedDay > 0) 
             {
                 let verifyDatePeriod = await Api.verifyDatePeriod(selectedDay, selectedMonth, selectedYear);
-                if(verifyDatePeriod)
+                if (verifyDatePeriod) 
                 {
                     setData(HoursDate);
-                }  
-                else
+                } 
+                else 
                 {
-                    Alert.alert("Não é possivel criar um periodo de funcionamento numa data anterior!");   
+                    setAlert(true, 'Erro ao criar o período:', 'Não é possível criar o período em uma data passada!');
                     setData([]);
-                }  
+                }
                 setSelectedHour([]);
-            }            
+            }
         }
         verifyDate();
     }, [selectedDay]);
 
     useEffect(() => {
         const verifyHour = async () => {
-            if(selectedDay > 0 && selectedHour.length > 0)
+            if (selectedDay > 0 && selectedHour.length > 0) 
             {
                 let result = await Api.verifyHourPeriod(selectedDay, selectedMonth, selectedYear, selectedHour);
-                if(result)
+                if (result)
                 {
-                    Alert.alert("Tudo ok para o registro!");
-                }
+                    setAlert(true, 'Aviso:', 'O registro pode ser efetuado!');
+                } 
                 else
                 {
-                    Alert.alert("Não é possivel registrar uma hora passada!");
+                    setAlert(true, 'Erro ao criar o período:', 'Não é possível registrar o período em uma data passada!');
                     setSelectedHour([]);
                 }
-            }            
+            }
         }
         verifyHour();
     }, [selectedDay, selectedHour]);
@@ -194,32 +196,32 @@ export default () => {
     }
 
     const onChangeValue = (itemSelected, index) => {
-        const newData = data.map(item => {
-            if(item.id === itemSelected.id)
+        const newData = data.map((item) => {
+            if (item.id === itemSelected.id) 
             {
                 return {
                     ...item,
-                    selected: !item.selected
+                    selected: !item.selected,
                 }
             }
             return {
                 ...item,
-                selected: item.selected
+                selected: item.selected,
             }
-        });
+        })
         setData(newData);
     }
 
     const renderItem = ({ item, index }) => {
-        return(
+        return (
             <TimeItem>
                 <TimeText>{ item.hour }</TimeText>
                 <CheckItem>
                     <CheckBox
                         disabled = { false }
-                        onAnimationType = 'fill'
-                        offAnimationType = 'fade'
-                        boxType = 'square'
+                        onAnimationType = "fill"
+                        offAnimationType = "fade"
+                        boxType = "square"
                         value = { item.selected }
                         onChange = { () => onChangeValue(item, index) }
                     />
@@ -229,38 +231,39 @@ export default () => {
     }
 
     const handleConfirmSelectClick = async () => {
-        const listSelect = data.filter(item => item.selected === true);
+        const listSelect = data.filter((item) => item.selected === true);
         let list = [];
-        listSelect.forEach(item => {
+        listSelect.forEach((item) => {
             list.push(item.hour);
         });
-        setSelectedHour(list);            
+        setSelectedHour(list);
     }
 
     const handleRegisterPeriodClick = async () => {
-        if(selectedDay != '' && selectedMonth != '' && selectedYear != '' && selectedHour != '')
+        if (selectedDay != '' && selectedMonth != '' && selectedYear != '' && selectedHour != '') 
         {
             await Api.setPeriod(user.idCourt, selectedDay, selectedMonth, selectedYear, selectedHour);
-        }
-        else
+            setAlert(true, 'Aviso:', 'O registro foi efetuado com sucesso!');
+        } 
+        else 
         {
-            Alert.alert("Selecione uma hora!");
-        }        
+            setAlert(true, 'Atenção:', 'Selecione uma hora!');
+        }
     }
 
-    return(
+    return (
         <Container>
-            <BackButton onPress = { handleBackButtonClick } >
+            <BackButton onPress = { handleBackButtonClick }>
                 <BackIcon width = "44" height = "44" fill = "#FFF" />
             </BackButton>
 
             <HeaderArea>
                 <HeaderTitle>Período de Funcionamento</HeaderTitle>
-            </HeaderArea> 
-            
+            </HeaderArea>
+
             <DateArea>
                 <DateInfo>
-                    <DatePrevArea onPress = { handleLeftDateClick } >
+                    <DatePrevArea onPress = { handleLeftDateClick }>
                         <NavPrevIcon width = "35" height = "35" fill = "#000" />
                     </DatePrevArea>
 
@@ -268,60 +271,77 @@ export default () => {
                         <DateTitle>{ months[selectedMonth] } { selectedYear }</DateTitle>
                     </DateTitleArea>
 
-                    <DataNextArea onPress = { handleRightDateClick } >
+                    <DataNextArea onPress = { handleRightDateClick }>
                         <NavNextIcon width = "35" height = "35" fill = "#000" />
                     </DataNextArea>
                 </DateInfo>
 
                 <DateList
-                    horizontal = { true } 
+                    horizontal = { true }
                     showsHorizontalScrollIndicator = { false }
                 >
                     {
-                        listDays.map((item, key) => (
-                            <DateItem 
-                                key = { key } 
+                        listDays.map((item, key) => 
+                        (
+                            <DateItem
+                                key = { key }
                                 onPress = { () => item.status ? setSelectedDay(item.number) : null }
-                                style = {{ 
+                                style = {{
                                     opacity: item.status ? 1 : 0.5,
-                                    backgroundColor: item.number === selectedDay ? Colors.primary : '#FFF'
+                                    backgroundColor: item.number === selectedDay ? Colors.primary : '#FFF',
                                 }}
                             >
                                 <DateItemWeekDay
-                                    style = {{ color: item.number === selectedDay ? '#FFF' : '#000' }}
-                                >{ item.weekday }</DateItemWeekDay>
+                                    style = {{
+                                        color: item.number === selectedDay ? '#FFF' : '#000',
+                                    }}
+                                >
+                                    { item.weekday }
+                                </DateItemWeekDay>
 
                                 <DateItemNumber
-                                    style = {{ color: item.number === selectedDay ? '#FFF' : '#000' }}
-                                >{ item.number }</DateItemNumber>
+                                    style={{
+                                        color: item.number === selectedDay ? '#FFF': '#000',
+                                    }}
+                                >
+                                    { item.number }
+                                </DateItemNumber>
                             </DateItem>
                         ))
                     }
-                </DateList>  
-            </DateArea>   
+                </DateList>
+            </DateArea>
 
             {
-                selectedDay > 0 && data.length > 0 &&
-                <RenderListItem>
-                    <TimeArea
-                        data = { data }
-                        renderItem = { renderItem }
-                        keyExtractor = { item => `key-${ item.id }` }
-                        numColumns = { 2 }
-                    />              
-            
-                    <ButtonArea>
-                        <FinishButton onPress = { handleConfirmSelectClick } >
-                            <FinishButtonText>Confirmar Seleção</FinishButtonText>
-                        </FinishButton>
+                selectedDay > 0 && data.length > 0 && 
+                (
+                    <RenderListItem>
+                        <TimeArea
+                            data = { data }
+                            renderItem = { renderItem }
+                            keyExtractor = { (item) => `key - ${ item.id }` }
+                            numColumns = { 2 }
+                        />
 
-                        <FinishButton onPress = { handleRegisterPeriodClick } >
-                            <FinishButtonText>Registrar Período</FinishButtonText>
-                        </FinishButton>
-                    </ButtonArea>  
-                </RenderListItem>
-            }        
-                     
+                        <ButtonArea>
+                            <FinishButton onPress = { handleConfirmSelectClick }>
+                                <FinishButtonText>Confirmar Seleção</FinishButtonText>
+                            </FinishButton>
+
+                            <FinishButton onPress = { handleRegisterPeriodClick }>
+                                <FinishButtonText>Registrar Período</FinishButtonText>
+                            </FinishButton>
+                        </ButtonArea>
+                    </RenderListItem>
+                )}
+            <AlertCustom
+                showAlert = { alertVisible }
+                setShowAlert = { setAlertVisible } 
+                alertTitle = { alertTitle }
+                alertMessage = { alertMessage }
+                displayNegativeButton = { true }
+                negativeText = { "OK" }
+            />
         </Container>
-    );
+    )
 }

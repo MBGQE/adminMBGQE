@@ -5,19 +5,19 @@ import Colors from '../assets/Themes/Colors';
 const InputArea = styled.View`
     width: 32%;
     height: 60px;
-    background: #FFF;
+    background-color: #FFF;
     flex-direction: row;
     border-radius: 30px;
     padding-left: 15px;
     align-items: center;
-    justify-content: center;
+    margin-bottom: 10px;
 `;
 
 const Input = styled.TextInput`
     flex: 1;
     font-size: 16px;
     color: ${ Colors.primary };
-    fontFamily: monospace;
+    margin-left: 10px;
 `;
 
 const TextRequesited = styled.Text`
@@ -25,30 +25,22 @@ const TextRequesited = styled.Text`
     font-size: 20px;
 `;
 
-export default ({ IconSvg, placeholder, value, onChangeText, requesited }) => {
-
-
-    return(
+export default ({ placeholder, value, onChangeText, requesited }) => {
+    return (
         <InputArea>
-            {
-                IconSvg != null 
-                ? 
-                <IconSvg width = "24" height = "24" fill = { Colors.primary } />
-                    :
-                null
-            }
-                
+
             <Input
                 placeholder = { placeholder }
                 placeholderTextColor = { Colors.primary }
                 value = { value }
-                onChangeText = { onChangeText }      
+                onChangeText = { onChangeText }
             />
 
             {
-                requesited &&
-                <TextRequesited>{ "*" }</TextRequesited>
+                requesited 
+                && 
+                <TextRequesited>*</TextRequesited>
             }
-        </InputArea>          
+        </InputArea>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 
 import InputText from '../../components/InputText';
 import InputInfo from '../../components/InputInfo';
@@ -7,7 +7,7 @@ import InputCep from '../../components/InputCep';
 import InputNumberStreet from '../../components/InputNumberStreet';
 import InputUF from '../../components/InputUF';
 
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import cep from 'cep-promise';
 
 import {
@@ -17,14 +17,15 @@ import {
     HeaderTitle,
 
     Scroller,
-    
+
     InputAreaAddress,
     InputArea,
     InputAreaInfo,
+
     TextRequesited,
 
     CustomButton,
-    CustomButtonText
+    CustomButtonText,
 } from './styles';
 
 import PhoneIcon from '../../assets/Images/phone.svg';
@@ -34,10 +35,9 @@ import { UserContext } from '../../context/UserContext';
 import Api from '../../Api';
 
 import { phoneSCMask, cepMask } from '../../Mask';
-import { Alert } from 'react-native';
+import AlertCustom from '../../components/AlertCustom';
 
 export default () => {
-
     const navigation = useNavigation();
     const { state: user } = useContext(UserContext);
     const { dispatch: userDispatch } = useContext(UserContext);
@@ -51,77 +51,89 @@ export default () => {
     const [stateField, setStateField] = useState('');
     const [cityField, setCityField] = useState('');
 
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const setAlert = (visible = false, title = '', message = '') => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
+
     const handleSignUpClick = async () => {
-        if( nameField != '' && 
+        if (nameField != '' &&
             phoneField != '' &&
             cepField != '' &&
             streetField != '' &&
             numberField != '' &&
             neighborhoodField != '' &&
             cityField != '' &&
-            stateField != '')
+            stateField != ''
+        )
         {
-            if(phoneField.length === 13 && (cepField.length === 9 || cepField === 8))
+            if (phoneField.length === 13 &&(cepField.length === 9 || cepField === 8)) 
             {
                 let result = await Api.createSportCourts(
-                    user.idAdm, 
-                    nameField, 
-                    phoneField, 
-                    cepField, 
-                    streetField,  
+                    user.idAdm,
+                    nameField,
+                    phoneField,
+                    cepField,
+                    streetField,
                     numberField,
                     neighborhoodField,
                     cityField,
-                    stateField);
-    
-                if(result)
+                    stateField
+                );
+                if (result) 
                 {
                     userDispatch({
                         type: 'setIdCourt',
                         payload: {
-                            idCourt: result.id 
-                        }
+                            idCourt: result.id,
+                        },
                     });
                     navigation.reset({
-                        routes: [{name: 'MainTab'}]
+                        routes: [{name: 'MainTab'}],
                     });
                 }
-            }
-            else
+            } 
+            else 
             {
-                Alert.alert("Os números do telefone ou do CEP estão com os tamanhos errados!");
+                setAlert(true, 'Erro:', 'Os números do telefone ou do CEP estão no formato errado!');
             }
-        }
-        else
+        } 
+        else 
         {
-            Alert.alert("Preencha todos os campos!");
-        }           
-    }   
+            setAlert(true, 'Erro:', 'Preencha todos os campos!');
+        }
+    }
 
     const fetchCep = async () => {
         await cep(cepField)
-            .then(result => {
+            .then((result) => {
                 setStateField(result.state);
                 setCityField(result.city);
                 setNeighborhoodField(result.neighborhood);
                 setStreetField(result.street);
             })
             .catch(() => {
-                Alert.alert("CEP informado é inválido!");
+                setAlert(true, 'Erro:', 'O CEP informado é unválido!');
             });
     }
 
-    return(
+    return (
         <Container>
             <HeaderArea>
                 <HeaderTitle>Cadastro Quadra</HeaderTitle>
             </HeaderArea>
+
             <Scroller>
                 <InputArea>
                     <InputText
                         placeholder = "Nome da Quadra"
                         value = { nameField }
-                        onChangeText = { t => setNameField(t) }
+                        onChangeText = { (t) => setNameField(t) }
                         requesited = { true }
                     />
 
@@ -129,16 +141,16 @@ export default () => {
                         IconSvg = { PhoneIcon }
                         placeholder = "Número do telefone"
                         value = { phoneSCMask(phoneField) }
-                        onChangeText = { t => setphoneField(t) }
-                        maxLength = { 13 }    
-                        minLength = { 13 }   
+                        onChangeText = { (t) => setphoneField(t) }
+                        maxLength = { 13 }
+                        minLength = { 13 }
                         requesited = { true }
                     />
 
                     <InputCep
                         placeholder = "Cep"
                         value = { cepMask(cepField) }
-                        onChangeText = { t => setCepField(t) }
+                        onChangeText = { (t) => setCepField(t) }
                         onEndEditing = { () => fetchCep() }
                         maxLength = { 9 }
                         minLength = { 9 }
@@ -146,53 +158,61 @@ export default () => {
                     />
                     <InputAreaAddress>
                         <InputText
-                            placeholder = { streetField != '' ? streetField : "Rua" }
+                            placeholder = { streetField != '' ? streetField : 'Rua' }
                             value = { streetField }
-                            onChangeText = { t => setStreetField(t) }
+                            onChangeText = { (t) => setStreetField(t) }
                             requesited = { true }
                         />
-                            
+
                         <InputAreaInfo>
                             <InputInfo
-                                placeholder = { neighborhoodField != '' ? neighborhoodField : "Bairro" }
+                                placeholder = { neighborhoodField != '' ? neighborhoodField : 'Bairro' }
                                 value = { neighborhoodField }
-                                onChangeText = { t => setNeighborhoodField(t) }
+                                onChangeText = { (t) => setNeighborhoodField(t) }
                                 requesited = { true }
-                            />   
+                            />
 
                             <InputNumberStreet
                                 placeholder = "Nº"
                                 value = { numberField }
-                                onChangeText = { t => setNumberField(t) }
+                                onChangeText = { (t) => setNumberField(t) }
                                 requesited = { true }
                             />
                         </InputAreaInfo>
+
                         <InputAreaInfo>
                             <InputInfo
-                                placeholder = { cityField != '' ? cityField : "Cidade" }
+                                placeholder = { cityField != '' ? cityField : 'Cidade' }
                                 value = { cityField }
-                                onChangeText = { t => setCityField(t) }
+                                onChangeText = { (t) => setCityField(t) }
                                 requesited = { true }
                             />
 
                             <InputUF
-                                placeholder = { stateField != '' ? stateField : "Estado" }
+                                placeholder = { stateField != '' ? stateField : 'Estado' }
                                 value = { stateField }
-                                onChangeText = { t => setStateField(t) }
+                                onChangeText = { (t) => setStateField(t) }
                                 requesited = { true }
                             />
-                        </InputAreaInfo>       
+                        </InputAreaInfo>
 
-                        <TextRequesited>{ "* Estes campos são obrigatórios!" }</TextRequesited>          
+                        <TextRequesited>* Estes campos são obrigatórios!</TextRequesited>
 
-                        <CustomButton onPress = { handleSignUpClick } >
+                        <CustomButton onPress = { handleSignUpClick }>
                             <CustomButtonText>CADASTRAR QUADRA</CustomButtonText>
                         </CustomButton>
                     </InputAreaAddress>
+                </InputArea>
 
-                </InputArea>          
-
+                <AlertCustom
+                    showAlert = { alertVisible }
+                    setShowAlert = { setAlertVisible }
+                    alertTitle = { alertTitle }
+                    alertMessage = { alertMessage }
+                    displayNegativeButton = { true }
+                    negativeText = { 'OK' }
+                />
             </Scroller>
         </Container>
-    );
+    )
 }

@@ -7,7 +7,9 @@ import PriceModal from '../../components/PriceModal';
 
 import {
     Container,
+    LoadingIcon,
     BackButton,
+
     UpServiceHeader,
     UpServiceTitle,
 
@@ -15,6 +17,7 @@ import {
     ServiceItem,
     ServiceInfo,
     ServiceName,
+
     ServicePrice,
 
     ButtonArea,
@@ -27,10 +30,7 @@ import EditIcon from '../../assets/Images/edit.svg';
 import DeleteIcon from '../../assets/Images/delete.svg';
 
 import Api from '../../Api';
-import { Alert } from 'react-native';
-import Colors from '../../assets/Themes/Colors';
-
-import AwesomeAlert from 'react-native-awesome-alerts';
+import AlertCustom from '../../components/AlertCustom';
 
 export default () => {
     const navigation = useNavigation();
@@ -38,20 +38,43 @@ export default () => {
     const [quadraInfo, setQuadraInfo] = useState('');
     const [newPrice, setNewPrice] = useState(null);
     const [showPriceModal, setShowPriceModal] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
+    
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertPosDelete, setAlertPosDelete] = useState(false);
+    const [delTipo, setDelTipo] = useState('');
+    const [delPreco, setDelPreco] = useState('');
+
+    const setAlert = (visible = false, title = '', message = '') => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(visible);
+    }
+
+    const setAlertDelete = (visible = false, title = '', message = '', selTipo, selPreco) => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertPosDelete(visible);
+        setDelTipo(selTipo);
+        setDelPreco(selPreco);
+    }
 
     const { state: user } = useContext(UserContext);
 
     getInfoQuadra = async () => {
+        setLoading(true);
         let result = await Api.LoadSportCourt(user.idCourt);
-        if(result.exists)
+        if (result.exists)
         {
             setQuadraInfo(result.data());
         }
+        setLoading(false);
     }
 
     useEffect(() => {
-        getInfoQuadra()
+        getInfoQuadra();
     }, [showPriceModal]);
 
     const handleBackButtonClick = () => {
@@ -63,71 +86,68 @@ export default () => {
         setShowPriceModal(true);
     }
 
-    const deleteServiceAlert = () => {
-        setShowAlert(true);
+    const handleDeleteButtonClick = (tipo, preco) => {
+        setAlertDelete(true, 'Aviso:', 'Deseja deletar essa quadra?', tipo, preco);
     }
 
-    const handleDeleteButtonClick = async (tipo, preco) => {
+    const deleteServiceCourt = async (tipo, preco) => {
         let result = await Api.deleteService(user.idCourt, tipo, preco);
-        if(result)
+        if (result) 
         {
-            Alert.alert(`Serviço ${tipo} R$${preco.toFixed(2)} deletado com sucesso!`);
+            setAlert(true, 'Aviso:',`Serviço ${tipo} R$${preco.toFixed(2)} deletado com sucesso!`);
             getInfoQuadra();
         }
     }
 
-    return(
+    return (
         <Container>
             <UpServiceHeader>
                 <UpServiceTitle>Quadras Cadastradas</UpServiceTitle>
             </UpServiceHeader>
             {
-                quadraInfo.servico
-                &&
-                <ServiceArea>
-                    {
-                        quadraInfo.servico.map((item, key) => (
-                            <ServiceItem key = { key } >
+                loading &&
+                <LoadingIcon size = "large" color = "#FFF" />
+            }
+            
+            {
+                quadraInfo.servico && 
+                (
+                    <ServiceArea>
+                        {
+                            quadraInfo.servico.map((item, key) => 
+                            (
+                                <ServiceItem key = { key } >
+                                    <ButtonArea>
+                                        <EditButton onPress = { () => handleEditButtonClick(key) } >
+                                            <EditIcon width = "25" height = "25" fill = "#FFF" />
+                                        </EditButton>
 
-                                <ButtonArea>
-                                    <EditButton onPress = { () => handleEditButtonClick(key) } >
-                                        <EditIcon width = "25" height = "25" fill = "#FFF" />
-                                    </EditButton>
-                                    <DeleteButton onPress = { () => deleteServiceAlert() } >
-                                        <DeleteIcon width = "25" height = "25" fill = "#FF0000" />
-                                    </DeleteButton>
-                                </ButtonArea>
+                                        <DeleteButton onPress = { () => handleDeleteButtonClick(item.tipo, item.preco) } >
+                                            <DeleteIcon width = "25" height = "25" fill = "#FF0000" />
+                                        </DeleteButton>
+                                    </ButtonArea>
 
-                                <AwesomeAlert
-                                    show={showAlert}
-                                    showProgress={false}
-                                    title="Deletar Quadra"
-                                    message="Deseja mesmo deletar essa quadra?"
-                                    closeOnTouchOutside={true}
-                                    closeOnHardwareBackPress={false}
-                                    showCancelButton={true}
-                                    showConfirmButton={true}
-                                    cancelText="Não"
-                                    confirmText="Sim"
-                                    confirmButtonColor={ Colors.primary }
-                                    cancelButtonColor="#FF0000"
-                                    onCancelPressed={() => {
-                                        setShowAlert(false);
-                                    }}
-                                    onConfirmPressed={() => {
-                                        handleDeleteButtonClick(item.tipo, item.preco);
-                                        setShowAlert(false);
-                                    }}
-                                /> 
+                                    <ServiceInfo>
+                                        <ServiceName>Tipo: { item.tipo }</ServiceName>
+                                        <ServicePrice>R$ { item.preco.toFixed(2) }</ServicePrice>
+                                    </ServiceInfo>
 
-                                <ServiceInfo>
-                                    <ServiceName>Tipo: { item.tipo }</ServiceName>
-                                    <ServicePrice>R$ { item.preco.toFixed(2) }</ServicePrice>
-                                </ServiceInfo>
-                            </ServiceItem>
-                        ))
-                    }
-                </ServiceArea>
+                                    <AlertCustom
+                                        showAlert = { alertPosDelete }
+                                        setShowAlert = { setAlertPosDelete } 
+                                        alertTitle = { alertTitle }
+                                        alertMessage = { alertMessage }
+                                        displayNegativeButton = { true }
+                                        negativeText = { "Não" }
+                                        displayPositiveButton = { true }
+                                        positiveText = { "Sim" }
+                                        onPressPositiveButton = { () => deleteServiceCourt(delTipo, delPreco) }
+                                    /> 
+                                </ServiceItem>
+                            ))
+                        }
+                    </ServiceArea>
+                )
             }
 
             <BackButton onPress = { handleBackButtonClick } >
@@ -140,6 +160,15 @@ export default () => {
                 quadraInfo = { quadraInfo }
                 service = { newPrice }
             />
+
+            <AlertCustom
+                showAlert = { alertVisible }
+                setShowAlert = { setAlertVisible }
+                alertTitle = { alertTitle }
+                alertMessage = { alertMessage }
+                displayNegativeButton = { true }
+                negativeText = { 'OK' }
+            />
         </Container>
-    );
+    )
 }

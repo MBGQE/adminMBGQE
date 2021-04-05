@@ -5,7 +5,7 @@ import Colors from '../assets/Themes/Colors';
 const InputArea = styled.View`
     width: 100%;
     height: 60px;
-    background: #FFF;
+    background-color: #FFF;
     flex-direction: row;
     border-radius: 30px;
     padding-left: 15px;
@@ -18,7 +18,6 @@ const Input = styled.TextInput`
     font-size: 16px;
     color: ${ Colors.primary };
     margin-left: 10px;
-    fontFamily: monospace;
 `;
 
 const TextRequesited = styled.Text`
@@ -27,17 +26,15 @@ const TextRequesited = styled.Text`
 `;
 
 export default ({ IconSvg, placeholder, value, onChangeText, password, requesited }) => {
-
-    return(
+    return (
         <InputArea>
             {
-                IconSvg != null 
-                ? 
+                IconSvg != null ? 
                     <IconSvg width = "24" height = "24" fill = { Colors.primary } />
-                    :
+                    : 
                     null
             }
-                
+
             <Input
                 placeholder = { placeholder }
                 placeholderTextColor = { Colors.primary }
@@ -47,9 +44,10 @@ export default ({ IconSvg, placeholder, value, onChangeText, password, requesite
             />
 
             {
-                requesited &&
-                <TextRequesited>{ "*" }</TextRequesited>
+                requesited 
+                && 
+                <TextRequesited>*</TextRequesited>
             }
-        </InputArea>        
+        </InputArea>
     );
 }
