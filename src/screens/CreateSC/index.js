@@ -125,13 +125,13 @@ export default () => {
     return (
         <Container>
             <HeaderArea>
-                <HeaderTitle>Cadastro Quadra</HeaderTitle>
+                <HeaderTitle>Cadastro do Complexo Esportivo</HeaderTitle>
             </HeaderArea>
 
             <Scroller>
                 <InputArea>
                     <InputText
-                        placeholder = "Nome da Quadra"
+                        placeholder = "Nome do Complexo Esportivo"
                         value = { nameField }
                         onChangeText = { (t) => setNameField(t) }
                         requesited = { true }
@@ -199,7 +199,7 @@ export default () => {
                         <TextRequesited>* Estes campos são obrigatórios!</TextRequesited>
 
                         <CustomButton onPress = { handleSignUpClick }>
-                            <CustomButtonText>CADASTRAR QUADRA</CustomButtonText>
+                            <CustomButtonText>Cadastrar Complexo Esportivo</CustomButtonText>
                         </CustomButton>
                     </InputAreaAddress>
                 </InputArea>

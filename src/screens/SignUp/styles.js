@@ -42,7 +42,7 @@ export const InputArea = styled.View`
 export const TextRequesited = styled.Text`
     font-size: 18px;
     color: ${ Colors.textError };
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 `;
 
 export const CustomButton = styled.TouchableOpacity`

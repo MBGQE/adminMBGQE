@@ -95,7 +95,7 @@ export const PhotosItemArea = styled.View`
 export const PhotoItem = styled.TouchableOpacity`
     width: 115px;
     height: 115px;
-    border-width: 5px;
+    border-width: 3px;
     border-color: #FFF;
     border-radius: 20px;
     margin-top: 10px;

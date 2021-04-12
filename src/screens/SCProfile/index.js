@@ -252,39 +252,27 @@ export default () => {
                         <PhotoItem onPress = { handleImage1Click } >
                             {
                                 photoField1 != '' ? 
-                                (
                                     <Photo source = {{ uri: photoField1 }} />
-                                ) 
-                                : 
-                                (
+                                    : 
                                     <PhotoIcon width = "100" height = "100" fill = "#FFF" />
-                                )
                             }
                         </PhotoItem>
 
                         <PhotoItem onPress = { handleImage2Click } >
                             {
                                 photoField2 != '' ? 
-                                (
-                                    <Photo source = {{ uri: photoField2 }} />
-                                ) 
-                                : 
-                                (
-                                    <PhotoIcon width = "100" height = "100" fill = "#FFF" />
-                                )
+                                <Photo source = {{ uri: photoField2 }} />
+                                    : 
+                                <PhotoIcon width = "100" height = "100" fill = "#FFF" />
                             }
                         </PhotoItem>
 
                         <PhotoItem onPress = { handleImage3Click } >
                             {
                                 photoField3 != '' ? 
-                                (
-                                    <Photo source = {{ uri: photoField3 }} />
-                                ) 
-                                : 
-                                (
-                                    <PhotoIcon width = "100" height = "100" fill = "#FFF" />
-                                )
+                                <Photo source = {{ uri: photoField3 }} />
+                                    : 
+                                <PhotoIcon width = "100" height = "100" fill = "#FFF" />
                             }
                         </PhotoItem>
 

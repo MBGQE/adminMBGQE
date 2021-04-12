@@ -11,7 +11,7 @@ export const Container = styled.SafeAreaView`
 export const HeaderArea = styled.View`
     margin-top: 33px;
     margin-left: 50px;
-    width: 200px;
+    width: 100%;
 `;
 
 export const HeaderTitle = styled.Text`
@@ -40,7 +40,7 @@ export const InputAreaInfo = styled.View`
 export const TextRequesited = styled.Text`
     font-size: 18px;
     color: ${ Colors.textError };
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 `;
 
 export const CustomButton = styled.TouchableOpacity`
