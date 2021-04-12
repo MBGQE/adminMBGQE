@@ -277,6 +277,7 @@ export default {
                 titulo: infoQuadra.data().name,
                 body: `O agendamento do dia ${infoAgendamento.data} às ${infoAgendamento.hora} foi cancelado!`,
                 token: infoAgendamento.jogadorToken,
+                idJogador: infoAgendamento.idJogador,
                 horaNotificacao: new Date(),
             });
 

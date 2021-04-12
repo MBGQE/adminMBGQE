@@ -68,7 +68,6 @@ export default () => {
             if (result) 
             {
                 setAlert(true, 'Aviso:', 'Nova quadra registrada com sucesso!');
-                navigation.goBack();
             } 
             else 
             {

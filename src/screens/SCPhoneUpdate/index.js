@@ -54,7 +54,6 @@ export default () => {
             if (result) 
             {
                 setAlert(true, 'Aviso:', 'Telefone alterado com sucesso!');
-                navigation.goBack();
             }
         } 
         else 

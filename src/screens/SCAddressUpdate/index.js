@@ -95,7 +95,6 @@ export default () => {
             if (result) 
             {
                 setAlert(true, 'Aviso:', 'O endereço foi atualizado com sucesso!');
-                navigation.goBack();
             }
         } 
         else 
